@@ -6,11 +6,13 @@
 @import "~@edx/frontend-component-footer/dist/footer";
 @import "~@edx/frontend-component-header/dist/index";
 
+@import "@fontsource/hind";
 
 #root {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  font-family: "Hind", sans-serif;
 
   main {
     flex-grow: 1;
@@ -231,7 +233,7 @@
     justify-content: center;
     align-items: center;
 
-    @media (max-width: -1 + map-get($grid-breakpoints, "sm")) {
+    @media (max-width: (-1 + map-get($grid-breakpoints, "sm"))) {
       padding-top: 1rem;
       padding-bottom: 1rem;
     }
@@ -291,8 +293,8 @@
   // here we compensate for the padding of the parent div with "container-xl"
   // class to ensure that the viewport width is the same as the width of the
   // iframe.
-  margin-left: -$grid-gutter-width * .5;
-  margin-right: -$grid-gutter-width * .5;
+  margin-left: -$grid-gutter-width * 0.5;
+  margin-right: -$grid-gutter-width * 0.5;
 
   margin-bottom: 2rem;
 
@@ -372,7 +374,7 @@
 
 .raised-card {
   border: 0 !important;
-  box-shadow: 0 .0625rem .125rem rgba(0, 0, 0, .2) !important;
+  box-shadow: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.2) !important;
 }
 
 // Import component-specific sass files
