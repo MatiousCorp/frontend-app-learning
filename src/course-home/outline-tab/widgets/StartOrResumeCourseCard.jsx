@@ -57,17 +57,15 @@ const StartOrResumeCourseCard = ({ intl }) => {
           bgcolor: '#434C59',
           height: '50px',
           borderRadius: '5px',
-          '&:hover': {
-            bgcolor: 'white',
-          },
         }}
-        startIcon={<PlayCircleOutlineIcon style={{ color: 'grey', fontSize: 24 }} />}
+        startIcon={<PlayCircleOutlineIcon style={{ color: 'white', fontSize: 24 }} />}
       >
         <Typography
           fontSize="16px"
           fontWeight={500}
           textTransform="capitalize"
           fontFamily="Hidi, sans-serif"
+          color="white"
         >
           {hasVisitedCourse
             ? intl.formatMessage(messages.resume)
