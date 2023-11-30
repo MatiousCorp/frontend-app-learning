@@ -60,6 +60,7 @@ const Section = ({ courseId, defaultOpen, expand, intl, section }) => {
           width="100%"
           fontWeight={700}
           fontSize="20px"
+          fontFamily="Hind"
           sx={{ verticalAlign: 'top !important' }}
         >
           {title}

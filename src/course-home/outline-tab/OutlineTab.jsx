@@ -113,7 +113,7 @@ const OutlineTab = ({ intl }) => {
     <>
       <div data-learner-type={learnerType} className="row w-100 mx-0 my-3 justify-content-between">
         <div className="col-12 col-sm-auto p-0">
-          <Typography fontSize="48px" fontWeight={700} color="#1A2029">
+          <Typography fontSize="48px" fontWeight={700} color="#1A2029" fontFamily="Hind">
             {title}
           </Typography>
         </div>
@@ -176,7 +176,7 @@ const OutlineTab = ({ intl }) => {
                       fontSize="18px"
                       fontWeight={600}
                       textTransform="capitalize"
-                      fontFamily="Hidi, sans-serif"
+                      fontFamily="Hind"
                     >
                       {expandAll
                         ? intl.formatMessage(messages.collapseAll)

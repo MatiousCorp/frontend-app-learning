@@ -17,7 +17,7 @@ const CourseHandouts = ({ intl }) => {
 
   return (
     <section className="mb-4">
-      <Typography fontSize="18px" fontWeight={700} color="#1A2029">
+      <Typography fontSize="18px" fontWeight={700} color="#1A2029" fontFamily="Hind">
         {intl.formatMessage(messages.handouts)}
       </Typography>
       <LmsHtmlFragment

@@ -47,7 +47,9 @@ const LaunchCourseHomeTourButton = ({ intl, srOnly }) => {
           {!srOnly && (
             <Icon src={Compass} className="mr-2" style={{ height: '18px', width: '18px' }} />
           )}
-          <Typography fontSize="15px">{intl.formatMessage(messages.launchTour)}</Typography>
+          <Typography fontSize="15px" fontFamily="Hind">
+            {intl.formatMessage(messages.launchTour)}
+          </Typography>
         </Button>
       )}
     </>

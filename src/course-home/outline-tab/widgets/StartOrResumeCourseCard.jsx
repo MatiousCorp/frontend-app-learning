@@ -43,7 +43,7 @@ const StartOrResumeCourseCard = ({ intl }) => {
       padding="15px"
       sx={{ mb: '1rem' }}
     >
-      <Typography fontSize="20px" fontWeight={700}>
+      <Typography fontSize="20px" fontWeight={700} fontFamily="Hind">
         {hasVisitedCourse
           ? intl.formatMessage(messages.resumeBlurb)
           : intl.formatMessage(messages.startBlurb)}
@@ -64,7 +64,7 @@ const StartOrResumeCourseCard = ({ intl }) => {
           fontSize="16px"
           fontWeight={500}
           textTransform="capitalize"
-          fontFamily="Hidi, sans-serif"
+          fontFamily="Hind"
           color="white"
         >
           {hasVisitedCourse

@@ -63,7 +63,7 @@ const CourseTools = ({ intl }) => {
 
   return (
     <section className="mb-3">
-      <Typography fontSize="18px" fontWeight={700} fontFamily="Hidi, sans-serif" color="#1A2029">
+      <Typography fontSize="18px" fontWeight={700} fontFamily="Hind" color="#1A2029">
         {intl.formatMessage(messages.tools)}
       </Typography>
       <ul className="list-unstyled mt-1">

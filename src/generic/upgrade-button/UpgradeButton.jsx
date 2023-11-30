@@ -25,12 +25,7 @@ const UpgradeButton = props => {
       fullWidth
       {...rest}
     >
-      <Typography
-        fontSize="16px"
-        fontWeight={500}
-        textTransform="capitalize"
-        fontFamily="Hidi, sans-serif"
-      >
+      <Typography fontSize="16px" fontWeight={500} textTransform="capitalize" fontFamily="Hind">
         <FormattedMessage
           id="learning.upgradeButton.buttonText"
           defaultMessage="Upgrade for {pricing}"

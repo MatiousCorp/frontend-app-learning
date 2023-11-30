@@ -482,12 +482,7 @@ const UpgradeNotification = ({
         }}
         fullWidth
       >
-        <Typography
-          fontSize="16px"
-          fontWeight={500}
-          textTransform="capitalize"
-          fontFamily="Hidi, sans-serif"
-        >
+        <Typography fontSize="16px" fontWeight={500} textTransform="capitalize" fontFamily="Hind">
           View Course Details
         </Typography>
       </Button>
