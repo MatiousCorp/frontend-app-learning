@@ -90,11 +90,6 @@ const WeeklyLearningGoalCard = ({ daysPerWeek, subscribedToReminders, intl }) =>
       className="row w-100 m-0 mb-3 raised-card"
       data-testid="weekly-learning-goal-card"
     >
-      {/* <Card.Header
-        size="sm"
-        title={<div id="set-weekly-goal-header">{intl.formatMessage(messages.setWeeklyGoal)}</div>}
-        subtitle={intl.formatMessage(messages.setWeeklyGoalDetail)}
-      /> */}
       <Box paddingX="20px" pt="20px">
         <Typography fontWeight={700} fontSize="22px" fontFamily="Hind">
           {intl.formatMessage(messages.setWeeklyGoal)}
