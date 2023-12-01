@@ -10,17 +10,12 @@ import { Link } from 'react-router-dom';
 import { useModel, useModels } from '../../generic/model-store';
 import JumpNavMenuItem from './JumpNavMenuItem';
 
-const CourseBreadcrumb = ({
-  content,
-  withSeparator,
-  courseId,
-  sequenceId,
-  unitId,
-  isStaff,
-}) => {
-  const defaultContent = content.filter(
-    (destination) => destination.default,
-  )[0] || { id: courseId, label: '', sequences: [] };
+const CourseBreadcrumb = ({ content, withSeparator, courseId, sequenceId, unitId, isStaff }) => {
+  const defaultContent = content.filter(destination => destination.default)[0] || {
+    id: courseId,
+    label: '',
+    sequences: [],
+  };
 
   const showRegularLink = getConfig().ENABLE_JUMPNAV !== 'true' || content.length < 2 || !isStaff;
   const [isOpen, open, close] = useToggle(false);
@@ -28,7 +23,9 @@ const CourseBreadcrumb = ({
   return (
     <>
       {withSeparator && (
-        <li className="col-auto p-0 mx-2 text-primary-500 text-truncate text-nowrap" role="presentation" aria-hidden>/</li>
+        <li className="col-auto p-0 mx-2 text-truncate text-nowrap" role="presentation" aria-hidden>
+          /
+        </li>
       )}
 
       <li
@@ -41,7 +38,7 @@ const CourseBreadcrumb = ({
       >
         {showRegularLink ? (
           <Link
-            className="text-primary-500"
+            style={{ color: '#1A2029' }}
             to={
               defaultContent.sequences.length
                 ? `/course/${courseId}/${defaultContent.sequences[0].id}`
@@ -54,13 +51,13 @@ const CourseBreadcrumb = ({
           <>
             {
               // eslint-disable-next-line
-              <a className="text-primary-500" onClick={open} ref={setTarget}>
+              <a style={{ color: '#1A2029' }} onClick={open} ref={setTarget}>
                 {defaultContent.label}
               </a>
             }
             <ModalPopup positionRef={target} isOpen={isOpen} onClose={close}>
               <Menu>
-                {content.map((item) => (
+                {content.map(item => (
                   <JumpNavMenuItem
                     isDefault={item.default}
                     sequences={item.sequences}
@@ -102,21 +99,13 @@ CourseBreadcrumb.defaultProps = {
   isStaff: null,
 };
 
-const CourseBreadcrumbs = ({
-  courseId,
-  sectionId,
-  sequenceId,
-  unitId,
-  isStaff,
-}) => {
+const CourseBreadcrumbs = ({ courseId, sectionId, sequenceId, unitId, isStaff }) => {
   const course = useModel('coursewareMeta', courseId);
-  const courseStatus = useSelector((state) => state.courseware.courseStatus);
-  const sequenceStatus = useSelector(
-    (state) => state.courseware.sequenceStatus,
-  );
+  const courseStatus = useSelector(state => state.courseware.courseStatus);
+  const sequenceStatus = useSelector(state => state.courseware.sequenceStatus);
 
   const allSequencesInSections = Object.fromEntries(
-    useModels('sections', course.sectionIds).map((section) => [
+    useModels('sections', course.sectionIds).map(section => [
       section.id,
       {
         default: section.id === sectionId,
@@ -138,7 +127,7 @@ const CourseBreadcrumbs = ({
           sequences: section.sequences,
         });
         if (section.default) {
-          section.sequences.forEach((sequence) => {
+          section.sequences.forEach(sequence => {
             sequentials.push({
               id: sequence.id,
               label: sequence.title,
@@ -156,11 +145,7 @@ const CourseBreadcrumbs = ({
     <nav aria-label="breadcrumb" className="my-4 d-inline-block col-sm-10">
       <ol className="list-unstyled d-flex flex-nowrap align-items-center m-0">
         <li className="list-unstyled col-auto m-0 p-0">
-          <Link
-            className="flex-shrink-0 text-primary"
-            to={`/course/${courseId}/home`}
-            replace
-          >
+          <Link style={{ color: '#1A2029' }} to={`/course/${courseId}/home`} replace>
             <FontAwesomeIcon icon={faHome} className="mr-2" />
             <FormattedMessage
               id="learn.breadcrumb.navigation.course.home"
@@ -169,7 +154,7 @@ const CourseBreadcrumbs = ({
             />
           </Link>
         </li>
-        {links.map((content) => (
+        {links.map(content => (
           <CourseBreadcrumb
             courseId={courseId}
             sequenceId={sequenceId}
