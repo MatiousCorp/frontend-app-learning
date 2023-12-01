@@ -49,7 +49,13 @@ const UnitNavigation = ({ intl, sequenceId, unitId, onClickPrevious, onClickNext
   };
 
   return (
-    <Box display="flex" justifyContent="space-between" border="1px solid #eaeaea" height="70px">
+    <Box
+      display="flex"
+      justifyContent="space-between"
+      borderTop="1px solid #eaeaea"
+      borderBottom="1px solid #eaeaea"
+      height="70px"
+    >
       <Box
         width="50%"
         height="100%"
