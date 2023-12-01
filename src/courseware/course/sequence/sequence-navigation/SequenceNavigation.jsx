@@ -77,7 +77,7 @@ const SequenceNavigation = ({
         display="flex"
         justifyContent="flex-end"
         sx={{
-          alignItems: 'baseline',
+          alignItems: 'center',
         }}
       >
         <Typography fontSize="18px" fontWeight={700} color="#1A2029" fontFamily="Hind">

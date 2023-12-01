@@ -35,7 +35,7 @@ const UnitNavigation = ({ intl, sequenceId, unitId, onClickPrevious, onClickNext
         display="flex"
         justifyContent="flex-end"
         sx={{
-          alignItems: 'baseline',
+          alignItems: 'center',
         }}
       >
         <UnitNavigationEffortEstimate sequenceId={sequenceId} unitId={unitId}>
