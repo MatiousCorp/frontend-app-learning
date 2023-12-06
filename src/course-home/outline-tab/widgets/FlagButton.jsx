@@ -1,14 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { Typography } from '@mui/material';
 
-const FlagButton = ({
-  buttonIcon,
-  title,
-  text,
-  handleSelect,
-  isSelected,
-}) => (
+const FlagButton = ({ buttonIcon, title, text, handleSelect, isSelected }) => (
   <button
     type="button"
     className={classnames(
@@ -20,14 +15,21 @@ const FlagButton = ({
     onClick={() => handleSelect()}
     data-testid={`weekly-learning-goal-input-${title}`}
   >
-    <div className="row w-100 m-0 justify-content-center pb-1">
-      {buttonIcon}
+    <div className="row w-100 m-0 justify-content-center pb-2">{buttonIcon}</div>
+    <div className={classnames('row w-100 m-0 justify-content-center')}>
+      <Typography fontWeight={isSelected ? 600 : 500} fontSize="16px" fontFamily="Hind">
+        {title}
+      </Typography>
     </div>
-    <div className={classnames('row w-100 m-0 justify-content-center small text-gray-700 pb-1', isSelected ? 'font-weight-bold' : '')}>
-      {title}
-    </div>
-    <div className={classnames('row w-100 m-0 justify-content-center micro text-gray-500', isSelected ? 'font-weight-bold' : '')}>
-      {text}
+    <div className={classnames('row w-100 m-0 justify-content-center')}>
+      <Typography
+        fontWeight={isSelected ? 600 : 500}
+        fontSize="14px"
+        fontFamily="Hind"
+        color="grey"
+      >
+        {text}
+      </Typography>
     </div>
   </button>
 );

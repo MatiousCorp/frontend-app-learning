@@ -2,32 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import { Form, Card, Icon } from '@edx/paragon';
+import { Card, Icon } from '@edx/paragon';
 import { history } from '@edx/frontend-platform';
 import { sendTrackEvent } from '@edx/frontend-platform/analytics';
 import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { Email } from '@edx/paragon/icons';
 import { useSelector } from 'react-redux';
+import { Box, Typography } from '@mui/material';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import { styled } from '@mui/material/styles';
 import messages from '../messages';
 import LearningGoalButton from './LearningGoalButton';
 import { saveWeeklyLearningGoal } from '../../data';
 import { useModel } from '../../../generic/model-store';
 import './FlagButton.scss';
 
-const WeeklyLearningGoalCard = ({
-  daysPerWeek,
-  subscribedToReminders,
-  intl,
-}) => {
-  const {
-    courseId,
-  } = useSelector(state => state.courseHome);
+const WeeklyLearningGoalCard = ({ daysPerWeek, subscribedToReminders, intl }) => {
+  const { courseId } = useSelector(state => state.courseHome);
 
-  const {
-    isMasquerading,
-    org,
-  } = useModel('courseHomeMeta', courseId);
+  const { isMasquerading, org } = useModel('courseHomeMeta', courseId);
 
   const { administrator } = getAuthenticatedUser();
 
@@ -41,7 +36,8 @@ const WeeklyLearningGoalCard = ({
     const selectReminders = daysPerWeekGoal === null ? true : isGetReminderSelected;
     setGetReminderSelected(selectReminders);
     setDaysPerWeekGoal(days);
-    if (!isMasquerading) { // don't save goal updates while masquerading
+    if (!isMasquerading) {
+      // don't save goal updates while masquerading
       saveWeeklyLearningGoal(courseId, days, selectReminders);
       sendTrackEvent('edx.ui.lms.goal.days-per-week.changed', {
         org_key: org,
@@ -59,7 +55,8 @@ const WeeklyLearningGoalCard = ({
   function handleSubscribeToReminders(event) {
     const isGetReminderChecked = event.target.checked;
     setGetReminderSelected(isGetReminderChecked);
-    if (!isMasquerading) { // don't save goal updates while masquerading
+    if (!isMasquerading) {
+      // don't save goal updates while masquerading
       saveWeeklyLearningGoal(courseId, daysPerWeekGoal, isGetReminderChecked);
       sendTrackEvent('edx.ui.lms.goal.reminder-selected.changed', {
         org_key: org,
@@ -84,7 +81,7 @@ const WeeklyLearningGoalCard = ({
         search: currentParams.toString(),
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search]);
 
   return (
@@ -93,11 +90,14 @@ const WeeklyLearningGoalCard = ({
       className="row w-100 m-0 mb-3 raised-card"
       data-testid="weekly-learning-goal-card"
     >
-      <Card.Header
-        size="sm"
-        title={(<div id="set-weekly-goal-header">{intl.formatMessage(messages.setWeeklyGoal)}</div>)}
-        subtitle={intl.formatMessage(messages.setWeeklyGoalDetail)}
-      />
+      <Box paddingX="20px" pt="20px">
+        <Typography fontWeight={700} fontSize="22px" fontFamily="Hind">
+          {intl.formatMessage(messages.setWeeklyGoal)}
+        </Typography>
+        <Typography fontWeight={400} fontSize="18px" fontFamily="Hind" sx={{ opacity: 0.7 }}>
+          {intl.formatMessage(messages.setWeeklyGoalDetail)}
+        </Typography>
+      </Box>
       <Card.Section className="text-gray-700 small">
         <div
           role="radiogroup"
@@ -121,26 +121,29 @@ const WeeklyLearningGoalCard = ({
           />
         </div>
         <div className="d-flex pt-3">
-          <Form.Switch
+          <FormControlLabel
+            control={<IOSSwitch sx={{ m: 1 }} defaultChecked />}
+            label={(
+              <Typography fontWeight={400} fontSize="18px" fontFamily="Hind">
+                {intl.formatMessage(messages.setGoalReminder)}
+              </Typography>
+            )}
             checked={isGetReminderSelected}
-            onChange={(event) => handleSubscribeToReminders(event)}
+            onChange={event => handleSubscribeToReminders(event)}
             disabled={!daysPerWeekGoal}
-          >
-            <small>{intl.formatMessage(messages.setGoalReminder)}</small>
-          </Form.Switch>
+          />
         </div>
       </Card.Section>
       {isGetReminderSelected && (
         <Card.Section muted>
           <div className="row w-100 m-0 small align-center">
             <div className="d-flex align-items-center pr-1">
-              <Icon
-                className="text-primary-500"
-                src={Email}
-              />
+              <Icon className="text-primary-500" src={Email} />
             </div>
             <div className="col">
-              {intl.formatMessage(messages.goalReminderDetail)}
+              <Typography fontWeight={400} fontSize="16px" fontFamily="Hind">
+                {intl.formatMessage(messages.goalReminderDetail)}
+              </Typography>
             </div>
           </div>
         </Card.Section>
@@ -160,3 +163,51 @@ WeeklyLearningGoalCard.defaultProps = {
   subscribedToReminders: false,
 };
 export default injectIntl(WeeklyLearningGoalCard);
+
+const IOSSwitch = styled(props => (
+  <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
+))(({ theme }) => ({
+  width: 42,
+  height: 26,
+  padding: 0,
+  '& .MuiSwitch-switchBase': {
+    padding: 0,
+    margin: 2,
+    transitionDuration: '300ms',
+    '&.Mui-checked': {
+      transform: 'translateX(16px)',
+      color: '#fff',
+      '& + .MuiSwitch-track': {
+        backgroundColor: theme.palette.mode === 'dark' ? '#2ECA45' : '#65C466',
+        opacity: 1,
+        border: 0,
+      },
+      '&.Mui-disabled + .MuiSwitch-track': {
+        opacity: 0.5,
+      },
+    },
+    '&.Mui-focusVisible .MuiSwitch-thumb': {
+      color: '#33cf4d',
+      border: '6px solid #fff',
+    },
+    '&.Mui-disabled .MuiSwitch-thumb': {
+      color: theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[600],
+    },
+    '&.Mui-disabled + .MuiSwitch-track': {
+      opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
+    },
+  },
+  '& .MuiSwitch-thumb': {
+    boxSizing: 'border-box',
+    width: 22,
+    height: 22,
+  },
+  '& .MuiSwitch-track': {
+    borderRadius: 26 / 2,
+    backgroundColor: theme.palette.mode === 'light' ? '#E9E9EA' : '#39393D',
+    opacity: 1,
+    transition: theme.transitions.create(['background-color'], {
+      duration: 500,
+    }),
+  },
+}));
