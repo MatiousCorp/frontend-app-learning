@@ -14,12 +14,14 @@ import {
 
 import { initializeMockApp } from '../../../setupTest';
 import {
-  courseId, dateRegex, opaqueKeysRegex, sequenceId, usageId,
+  courseId,
+  dateRegex,
+  opaqueKeysRegex,
+  sequenceId,
+  usageId,
 } from '../../../pacts/constants';
 
-const {
-  somethingLike: like, term, boolean, string, eachLike, integer,
-} = MatchersV3;
+const { somethingLike: like, term, boolean, string, eachLike, integer } = MatchersV3;
 const provider = new PactV3({
   consumer: 'frontend-app-learning',
   provider: 'lms',
@@ -33,9 +35,12 @@ const provider = new PactV3({
 describe('Courseware Service', () => {
   beforeAll(async () => {
     initializeMockApp();
-    mergeConfig({
-      LMS_BASE_URL: 'http://localhost:8081',
-    }, 'Custom app config for pact tests');
+    mergeConfig(
+      {
+        LMS_BASE_URL: 'http://localhost:8081',
+      },
+      'Custom app config for pact tests'
+    );
   });
 
   describe('When a request to get a learning sequence outline is made', () => {
@@ -83,9 +88,7 @@ describe('Courseware Service', () => {
           'course-v1:edX+DemoX+Demo_Course': {
             id: 'course-v1:edX+DemoX+Demo_Course',
             title: 'Demo Course',
-            sectionIds: [
-              'block-v1:edX+DemoX+Demo_Course+type@chapter+block@partial',
-            ],
+            sectionIds: ['block-v1:edX+DemoX+Demo_Course+type@chapter+block@partial'],
             hasScheduledContent: true,
           },
         },
@@ -141,9 +144,7 @@ describe('Courseware Service', () => {
                   {
                     id: 'block-v1:edX+DemoX+Demo_Course+type@chapter+block@nope',
                     title: 'Wholly unreleased',
-                    sequence_ids: [
-                      'block-v1:edX+DemoX+Demo_Course+type@sequential+block@nope2',
-                    ],
+                    sequence_ids: ['block-v1:edX+DemoX+Demo_Course+type@sequential+block@nope2'],
                     effective_start: '9999-07-01T17:00:00Z',
                   },
                 ],
@@ -328,7 +329,9 @@ describe('Courseware Service', () => {
               user_has_passing_grade: boolean(false),
               course_exit_page_is_active: boolean(false),
               certificate_data: {
-                cert_status: string('audit_passing'), cert_web_view_url: null, certificate_available_date: null,
+                cert_status: string('audit_passing'),
+                cert_web_view_url: null,
+                certificate_available_date: null,
               },
               verify_identity_url: null,
               verification_status: string('none'),
@@ -372,16 +375,18 @@ describe('Courseware Service', () => {
           showCompletion: false,
           allowProctoringOptOut: undefined,
         },
-        units: [{
-          id: 'block-v1:edX+DemoX+Demo_Course+type@vertical+block@2152d4a4aadc4cb0af5256394a3d1fc7',
-          sequenceId: 'block-v1:edX+DemoX+Demo_Course+type@sequential+block@basic_questions',
-          bookmarked: false,
-          complete: undefined,
-          title: 'Pointing on a Picture',
-          contentType: 'problem',
-          graded: true,
-          containsContentTypeGatedContent: false,
-        }],
+        units: [
+          {
+            id: 'block-v1:edX+DemoX+Demo_Course+type@vertical+block@2152d4a4aadc4cb0af5256394a3d1fc7',
+            sequenceId: 'block-v1:edX+DemoX+Demo_Course+type@sequential+block@basic_questions',
+            bookmarked: false,
+            complete: undefined,
+            title: 'Pointing on a Picture',
+            contentType: 'problem',
+            graded: true,
+            containsContentTypeGatedContent: false,
+          },
+        ],
       };
       setTimeout(() => {
         provider.addInteraction({
@@ -405,7 +410,9 @@ describe('Courseware Service', () => {
                 contains_content_type_gated_content: false,
                 href: '',
               }),
-              item_id: string('block-v1:edX+DemoX+Demo_Course+type@sequential+block@basic_questions'),
+              item_id: string(
+                'block-v1:edX+DemoX+Demo_Course+type@sequential+block@basic_questions'
+              ),
               is_time_limited: boolean(false),
               is_proctored: boolean(false),
               is_hidden_after_due: boolean(false),

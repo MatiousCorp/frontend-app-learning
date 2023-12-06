@@ -5,9 +5,7 @@ import { waitForElementToBeRemoved, fireEvent } from '@testing-library/dom';
 import '@testing-library/jest-dom/extend-expect';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
-import {
-  BrowserRouter, MemoryRouter, Route, Routes,
-} from 'react-router-dom';
+import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Factory } from 'rosie';
 import MockAdapter from 'axios-mock-adapter';
 
@@ -17,7 +15,10 @@ import { initializeMockApp, waitFor } from '../setupTest';
 import { DECODE_ROUTES } from '../constants';
 
 import CoursewareContainer from './CoursewareContainer';
-import { buildSimpleCourseBlocks, buildBinaryCourseBlocks } from '../shared/data/__factories__/courseBlocks.factory';
+import {
+  buildSimpleCourseBlocks,
+  buildBinaryCourseBlocks,
+} from '../shared/data/__factories__/courseBlocks.factory';
 import initializeStore from '../store';
 import { appendBrowserTimezoneToUrl } from '../utils';
 import { buildOutlineFromBlocks } from './data/__factories__/learningSequencesOutline.factory';
@@ -31,9 +32,14 @@ import { buildOutlineFromBlocks } from './data/__factories__/learningSequencesOu
 jest.mock(
   './course/sequence/Unit',
   // eslint-disable-next-line react/prop-types
-  () => function ({ courseId, id }) {
-    return <div className="fake-unit">Unit Contents {courseId} {id}</div>;
-  },
+  () =>
+    function ({ courseId, id }) {
+      return (
+        <div className="fake-unit">
+          Unit Contents {courseId} {id}
+        </div>
+      );
+    }
 );
 
 jest.mock('@edx/frontend-platform/analytics');
@@ -52,30 +58,16 @@ describe('CoursewareContainer', () => {
   const defaultCourseHomeMetadata = Factory.build('courseHomeMetadata');
   const defaultCourseId = defaultCourseMetadata.id;
   const defaultUnitBlocks = [
-    Factory.build(
-      'block',
-      { type: 'vertical' },
-      { courseId: defaultCourseId },
-    ),
-    Factory.build(
-      'block',
-      { type: 'vertical' },
-      { courseId: defaultCourseId },
-    ),
-    Factory.build(
-      'block',
-      { type: 'vertical' },
-      { courseId: defaultCourseId },
-    ),
+    Factory.build('block', { type: 'vertical' }, { courseId: defaultCourseId }),
+    Factory.build('block', { type: 'vertical' }, { courseId: defaultCourseId }),
+    Factory.build('block', { type: 'vertical' }, { courseId: defaultCourseId }),
   ];
   const {
     courseBlocks: defaultCourseBlocks,
     sequenceBlocks: [defaultSequenceBlock],
-  } = buildSimpleCourseBlocks(
-    defaultCourseId,
-    defaultCourseHomeMetadata.title,
-    { unitBlocks: defaultUnitBlocks },
-  );
+  } = buildSimpleCourseBlocks(defaultCourseId, defaultCourseHomeMetadata.title, {
+    unitBlocks: defaultUnitBlocks,
+  });
 
   beforeEach(() => {
     axiosMock = new MockAdapter(getAuthenticatedHttpClient());
@@ -86,11 +78,8 @@ describe('CoursewareContainer', () => {
       <AppProvider store={store} wrapWithRouter={false}>
         <UserMessagesProvider>
           <Routes>
-            {DECODE_ROUTES.COURSEWARE.map((route) => (
-              <Route
-                path={route}
-                element={<CoursewareContainer />}
-              />
+            {DECODE_ROUTES.COURSEWARE.map(route => (
+              <Route path={route} element={<CoursewareContainer />} />
             ))}
           </Routes>
         </UserMessagesProvider>
@@ -107,33 +96,47 @@ describe('CoursewareContainer', () => {
     const courseId = courseMetadata.id;
     // If we weren't given a list of sequence metadatas for URL mocking,
     // then construct it ourselves by looking at courseBlocks.
-    const sequenceMetadatas = options.sequenceMetadatas || (
+    const sequenceMetadatas =
+      options.sequenceMetadatas ||
       Object.values(courseBlocks.blocks)
         .filter(block => block.type === 'sequential')
-        .map(sequenceBlock => Factory.build(
-          'sequenceMetadata',
-          {},
-          {
-            courseId,
-            sequenceBlock,
-            unitBlocks: sequenceBlock.children.map(unitId => courseBlocks.blocks[unitId]),
-          },
-        ))
-    );
+        .map(sequenceBlock =>
+          Factory.build(
+            'sequenceMetadata',
+            {},
+            {
+              courseId,
+              sequenceBlock,
+              unitBlocks: sequenceBlock.children.map(unitId => courseBlocks.blocks[unitId]),
+            }
+          )
+        );
 
-    const learningSequencesUrlRegExp = new RegExp(`${getConfig().LMS_BASE_URL}/api/learning_sequences/v1/course_outline/*`);
+    const learningSequencesUrlRegExp = new RegExp(
+      `${getConfig().LMS_BASE_URL}/api/learning_sequences/v1/course_outline/*`
+    );
     axiosMock.onGet(learningSequencesUrlRegExp).reply(200, courseOutline);
 
-    const courseMetadataUrl = appendBrowserTimezoneToUrl(`${getConfig().LMS_BASE_URL}/api/courseware/course/${courseId}`);
+    const courseMetadataUrl = appendBrowserTimezoneToUrl(
+      `${getConfig().LMS_BASE_URL}/api/courseware/course/${courseId}`
+    );
     axiosMock.onGet(courseMetadataUrl).reply(200, courseMetadata);
 
-    const courseHomeMetadataUrl = appendBrowserTimezoneToUrl(`${getConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`);
+    const courseHomeMetadataUrl = appendBrowserTimezoneToUrl(
+      `${getConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`
+    );
     axiosMock.onGet(courseHomeMetadataUrl).reply(200, courseHomeMetadata);
 
     sequenceMetadatas.forEach(sequenceMetadata => {
-      const sequenceMetadataUrl = `${getConfig().LMS_BASE_URL}/api/courseware/sequence/${sequenceMetadata.item_id}`;
+      const sequenceMetadataUrl = `${getConfig().LMS_BASE_URL}/api/courseware/sequence/${
+        sequenceMetadata.item_id
+      }`;
       axiosMock.onGet(sequenceMetadataUrl).reply(200, sequenceMetadata);
-      const proctoredExamApiUrl = `${getConfig().LMS_BASE_URL}/api/edx_proctoring/v1/proctored_exam/attempt/course_id/${courseId}/content_id/${sequenceMetadata.item_id}?is_learning_mfe=true`;
+      const proctoredExamApiUrl = `${
+        getConfig().LMS_BASE_URL
+      }/api/edx_proctoring/v1/proctored_exam/attempt/course_id/${courseId}/content_id/${
+        sequenceMetadata.item_id
+      }?is_learning_mfe=true`;
       axiosMock.onGet(proctoredExamApiUrl).reply(200, { exam: {}, active_attempt: {} });
     });
 
@@ -143,11 +146,15 @@ describe('CoursewareContainer', () => {
     Object.values(courseBlocks.blocks)
       .filter(block => block.type === 'vertical')
       .forEach(unitBlock => {
-        const sequenceMetadataUrl = `${getConfig().LMS_BASE_URL}/api/courseware/sequence/${unitBlock.id}`;
+        const sequenceMetadataUrl = `${getConfig().LMS_BASE_URL}/api/courseware/sequence/${
+          unitBlock.id
+        }`;
         axiosMock.onGet(sequenceMetadataUrl).reply(422, {});
       });
 
-    const discussionConfigUrl = new RegExp(`${getConfig().LMS_BASE_URL}/api/discussion/v1/courses/*`);
+    const discussionConfigUrl = new RegExp(
+      `${getConfig().LMS_BASE_URL}/api/discussion/v1/courses/*`
+    );
     axiosMock.onGet(discussionConfigUrl).reply(200, { provider: 'legacy' });
   }
 
@@ -166,7 +173,7 @@ describe('CoursewareContainer', () => {
     const spinner = screen.getByRole('status');
 
     expect(spinner.firstChild).toContainHTML(
-      `<span class="sr-only">${tabMessages.loading.defaultMessage}</span>`,
+      `<span class="sr-only">${tabMessages.loading.defaultMessage}</span>`
     );
   });
 
@@ -181,12 +188,16 @@ describe('CoursewareContainer', () => {
       expect(courseHeader).toHaveTextContent(courseHomeMetadata.number);
       expect(courseHeader).toHaveTextContent(courseHomeMetadata.org);
       // Ensure the course title is showing up in the header.  This means we loaded course blocks properly.
-      expect(courseHeader.querySelector('.course-title')).toHaveTextContent(courseHomeMetadata.title);
+      expect(courseHeader.querySelector('.course-title')).toHaveTextContent(
+        courseHomeMetadata.title
+      );
     }
 
     function assertSequenceNavigation(container, expectedUnitCount = 3) {
       // Ensure we had appropriate sequence navigation buttons.  We should only have one unit.
-      const sequenceNavButtons = container.querySelectorAll('nav.sequence-navigation a, nav.sequence-navigation button');
+      const sequenceNavButtons = container.querySelectorAll(
+        'nav.sequence-navigation a, nav.sequence-navigation button'
+      );
       expect(sequenceNavButtons).toHaveLength(expectedUnitCount + 2);
 
       expect(sequenceNavButtons[0]).toHaveTextContent('Previous');
@@ -206,10 +217,12 @@ describe('CoursewareContainer', () => {
       const unitBlocks = defaultUnitBlocks;
 
       it('should use the resume block response to pick a unit if it contains one', async () => {
-        axiosMock.onGet(`${getConfig().LMS_BASE_URL}/api/courseware/resume/${courseId}`).reply(200, {
-          sectionId: sequenceBlock.id,
-          unitId: unitBlocks[1].id,
-        });
+        axiosMock
+          .onGet(`${getConfig().LMS_BASE_URL}/api/courseware/resume/${courseId}`)
+          .reply(200, {
+            sectionId: sequenceBlock.id,
+            unitId: unitBlocks[1].id,
+          });
 
         history.push(`/course/${courseId}`);
         const container = await waitFor(() => loadContainer());
@@ -227,12 +240,14 @@ describe('CoursewareContainer', () => {
         const sequenceMetadata = Factory.build(
           'sequenceMetadata',
           { position: 3 }, // position index is 1-based and is converted to 0-based for activeUnitIndex
-          { courseId, unitBlocks, sequenceBlock },
+          { courseId, unitBlocks, sequenceBlock }
         );
         setUpMockRequests({ sequenceMetadatas: [sequenceMetadata] });
 
         // Note how there is no sectionId/unitId returned in this mock response!
-        axiosMock.onGet(`${getConfig().LMS_BASE_URL}/api/courseware/resume/${courseId}`).reply(200, {});
+        axiosMock
+          .onGet(`${getConfig().LMS_BASE_URL}/api/courseware/resume/${courseId}`)
+          .reply(200, {});
 
         history.push(`/course/${courseId}`);
         const container = await waitFor(() => loadContainer());
@@ -247,9 +262,10 @@ describe('CoursewareContainer', () => {
     });
 
     describe('when the URL contains a section ID instead of a sequence ID', () => {
-      const {
-        courseBlocks, unitTree, sequenceTree, sectionTree,
-      } = buildBinaryCourseBlocks(courseId, courseHomeMetadata.title);
+      const { courseBlocks, unitTree, sequenceTree, sectionTree } = buildBinaryCourseBlocks(
+        courseId,
+        courseHomeMetadata.title
+      );
 
       function setUrl(urlSequenceId, urlUnitId = null) {
         history.push(`/course/${courseId}/${urlSequenceId}/${urlUnitId || ''}`);
@@ -283,7 +299,7 @@ describe('CoursewareContainer', () => {
       // });
 
       describe('when the URL does not contain a unit ID', () => {
-        it('should choose a unit within the section\'s first sequence', async () => {
+        it("should choose a unit within the section's first sequence", async () => {
           setUrl(sectionTree[1].id);
           const container = await waitFor(() => loadContainer());
           assertLoadedHeader(container);
@@ -300,8 +316,12 @@ describe('CoursewareContainer', () => {
           ...sectionTree[1],
           children: [],
         };
-        sequenceTree[1].forEach(sequence => { delete blocksWithEmptySection[sequence.id]; });
-        unitTree[1].flat().forEach(unit => { delete blocksWithEmptySection[unit.id]; });
+        sequenceTree[1].forEach(sequence => {
+          delete blocksWithEmptySection[sequence.id];
+        });
+        unitTree[1].flat().forEach(unit => {
+          delete blocksWithEmptySection[unit.id];
+        });
         const courseBlocksWithEmptySection = {
           ...courseBlocks,
           blocks: blocksWithEmptySection,
@@ -323,13 +343,17 @@ describe('CoursewareContainer', () => {
       it('should redirect /first to the first unit', async () => {
         history.push(`/course/${courseId}/${defaultSequenceBlock.id}/first`);
         await loadContainer();
-        expect(global.location.href).toEqual(`http://localhost/course/${courseId}/${defaultSequenceBlock.id}/${defaultUnitBlocks[0].id}`);
+        expect(global.location.href).toEqual(
+          `http://localhost/course/${courseId}/${defaultSequenceBlock.id}/${defaultUnitBlocks[0].id}`
+        );
       });
 
       it('should redirect /last to the last unit', async () => {
         history.push(`/course/${courseId}/${defaultSequenceBlock.id}/last`);
         await loadContainer();
-        expect(global.location.href).toEqual(`http://localhost/course/${courseId}/${defaultSequenceBlock.id}/${defaultUnitBlocks[2].id}`);
+        expect(global.location.href).toEqual(
+          `http://localhost/course/${courseId}/${defaultSequenceBlock.id}/${defaultUnitBlocks[2].id}`
+        );
       });
     });
 
@@ -374,7 +398,7 @@ describe('CoursewareContainer', () => {
         const sequenceMetadata = Factory.build(
           'sequenceMetadata',
           { position: 3 }, // position index is 1-based and is converted to 0-based for activeUnitIndex
-          { courseId, unitBlocks, sequenceBlock },
+          { courseId, unitBlocks, sequenceBlock }
         );
         setUpMockRequests({ sequenceMetadatas: [sequenceMetadata] });
 
@@ -407,19 +431,25 @@ describe('CoursewareContainer', () => {
       });
 
       it('should navigate between units and check block completion', async () => {
-        axiosMock.onPost(`${courseId}/xblock/${sequenceBlock.id}/handler/get_completion`).reply(200, {
-          complete: true,
-        });
+        axiosMock
+          .onPost(`${courseId}/xblock/${sequenceBlock.id}/handler/get_completion`)
+          .reply(200, {
+            complete: true,
+          });
 
         history.push(`/course/${courseId}/${sequenceBlock.id}/${unitBlocks[0].id}`);
         const container = await waitFor(() => loadContainer());
 
-        const sequenceNavButtons = container.querySelectorAll('nav.sequence-navigation a, nav.sequence-navigation button');
+        const sequenceNavButtons = container.querySelectorAll(
+          'nav.sequence-navigation a, nav.sequence-navigation button'
+        );
         const sequenceNextButton = sequenceNavButtons[4];
         expect(sequenceNextButton).toHaveTextContent('Next');
         fireEvent.click(sequenceNextButton);
 
-        expect(global.location.href).toEqual(`http://localhost/course/${courseId}/${sequenceBlock.id}/${unitBlocks[1].id}`);
+        expect(global.location.href).toEqual(
+          `http://localhost/course/${courseId}/${sequenceBlock.id}/${unitBlocks[1].id}`
+        );
       });
     });
 
@@ -453,7 +483,10 @@ describe('CoursewareContainer', () => {
 
       const courseId = courseMetadata.id;
 
-      const { courseBlocks, sequenceBlocks, unitBlocks } = buildSimpleCourseBlocks(courseId, courseMetadata.name);
+      const { courseBlocks, sequenceBlocks, unitBlocks } = buildSimpleCourseBlocks(
+        courseId,
+        courseMetadata.name
+      );
       setUpMockRequests({ courseBlocks, courseMetadata, courseHomeMetadata });
       history.push(`/course/${courseId}/${sequenceBlocks[0].id}/${unitBlocks[0].id}`);
       return { courseMetadata, unitBlocks };
@@ -477,14 +510,18 @@ describe('CoursewareContainer', () => {
       setUpWithDeniedStatus('data_sharing_access_required');
       await loadContainer();
 
-      expect(global.location.href).toEqual('http://localhost/redirect/consent?consentPath=data_sharing_consent_url');
+      expect(global.location.href).toEqual(
+        'http://localhost/redirect/consent?consentPath=data_sharing_consent_url'
+      );
     });
 
     it('should go to access denied page for a incorrect_active_enterprise error code', async () => {
       const { courseMetadata } = setUpWithDeniedStatus('incorrect_active_enterprise');
       await loadContainer();
 
-      expect(global.location.href).toEqual(`http://localhost/course/${courseMetadata.id}/access-denied`);
+      expect(global.location.href).toEqual(
+        `http://localhost/course/${courseMetadata.id}/access-denied`
+      );
     });
 
     it('should go to course home for an authentication_required error code', async () => {
@@ -505,7 +542,9 @@ describe('CoursewareContainer', () => {
       setUpWithDeniedStatus('audit_expired');
       await loadContainer();
 
-      expect(global.location.href).toEqual('http://localhost/redirect/dashboard?access_response_error=uhoh%20oh%20no');
+      expect(global.location.href).toEqual(
+        'http://localhost/redirect/dashboard?access_response_error=uhoh%20oh%20no'
+      );
     });
 
     it('should go to the dashboard with a notlive start date for a course_not_started error code', async () => {
@@ -513,7 +552,9 @@ describe('CoursewareContainer', () => {
       await loadContainer();
 
       const startDate = '2/5/2013'; // This date is based on our courseMetadata factory's sample data.
-      expect(global.location.href).toEqual(`http://localhost/redirect/dashboard?notlive=${startDate}`);
+      expect(global.location.href).toEqual(
+        `http://localhost/redirect/dashboard?notlive=${startDate}`
+      );
     });
   });
 });
