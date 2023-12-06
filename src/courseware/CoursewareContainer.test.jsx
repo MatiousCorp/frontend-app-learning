@@ -32,14 +32,13 @@ import { buildOutlineFromBlocks } from './data/__factories__/learningSequencesOu
 jest.mock(
   './course/sequence/Unit',
   // eslint-disable-next-line react/prop-types
-  () =>
-    function ({ courseId, id }) {
-      return (
-        <div className="fake-unit">
-          Unit Contents {courseId} {id}
-        </div>
-      );
-    }
+  () => function ({ courseId, id }) {
+    return (
+      <div className="fake-unit">
+        Unit Contents {courseId} {id}
+      </div>
+    );
+  },
 );
 
 jest.mock('@edx/frontend-platform/analytics');
@@ -100,30 +99,28 @@ describe('CoursewareContainer', () => {
       options.sequenceMetadatas ||
       Object.values(courseBlocks.blocks)
         .filter(block => block.type === 'sequential')
-        .map(sequenceBlock =>
-          Factory.build(
-            'sequenceMetadata',
-            {},
-            {
-              courseId,
-              sequenceBlock,
-              unitBlocks: sequenceBlock.children.map(unitId => courseBlocks.blocks[unitId]),
-            }
-          )
-        );
+        .map(sequenceBlock => Factory.build(
+          'sequenceMetadata',
+          {},
+          {
+            courseId,
+            sequenceBlock,
+            unitBlocks: sequenceBlock.children.map(unitId => courseBlocks.blocks[unitId]),
+          },
+        ));
 
     const learningSequencesUrlRegExp = new RegExp(
-      `${getConfig().LMS_BASE_URL}/api/learning_sequences/v1/course_outline/*`
+      `${getConfig().LMS_BASE_URL}/api/learning_sequences/v1/course_outline/*`,
     );
     axiosMock.onGet(learningSequencesUrlRegExp).reply(200, courseOutline);
 
     const courseMetadataUrl = appendBrowserTimezoneToUrl(
-      `${getConfig().LMS_BASE_URL}/api/courseware/course/${courseId}`
+      `${getConfig().LMS_BASE_URL}/api/courseware/course/${courseId}`,
     );
     axiosMock.onGet(courseMetadataUrl).reply(200, courseMetadata);
 
     const courseHomeMetadataUrl = appendBrowserTimezoneToUrl(
-      `${getConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`
+      `${getConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`,
     );
     axiosMock.onGet(courseHomeMetadataUrl).reply(200, courseHomeMetadata);
 
@@ -153,7 +150,7 @@ describe('CoursewareContainer', () => {
       });
 
     const discussionConfigUrl = new RegExp(
-      `${getConfig().LMS_BASE_URL}/api/discussion/v1/courses/*`
+      `${getConfig().LMS_BASE_URL}/api/discussion/v1/courses/*`,
     );
     axiosMock.onGet(discussionConfigUrl).reply(200, { provider: 'legacy' });
   }
@@ -173,7 +170,7 @@ describe('CoursewareContainer', () => {
     const spinner = screen.getByRole('status');
 
     expect(spinner.firstChild).toContainHTML(
-      `<span class="sr-only">${tabMessages.loading.defaultMessage}</span>`
+      `<span class="sr-only">${tabMessages.loading.defaultMessage}</span>`,
     );
   });
 
@@ -189,14 +186,14 @@ describe('CoursewareContainer', () => {
       expect(courseHeader).toHaveTextContent(courseHomeMetadata.org);
       // Ensure the course title is showing up in the header.  This means we loaded course blocks properly.
       expect(courseHeader.querySelector('.course-title')).toHaveTextContent(
-        courseHomeMetadata.title
+        courseHomeMetadata.title,
       );
     }
 
     function assertSequenceNavigation(container, expectedUnitCount = 3) {
       // Ensure we had appropriate sequence navigation buttons.  We should only have one unit.
       const sequenceNavButtons = container.querySelectorAll(
-        'nav.sequence-navigation a, nav.sequence-navigation button'
+        'nav.sequence-navigation a, nav.sequence-navigation button',
       );
       expect(sequenceNavButtons).toHaveLength(expectedUnitCount + 2);
 
@@ -240,7 +237,7 @@ describe('CoursewareContainer', () => {
         const sequenceMetadata = Factory.build(
           'sequenceMetadata',
           { position: 3 }, // position index is 1-based and is converted to 0-based for activeUnitIndex
-          { courseId, unitBlocks, sequenceBlock }
+          { courseId, unitBlocks, sequenceBlock },
         );
         setUpMockRequests({ sequenceMetadatas: [sequenceMetadata] });
 
@@ -264,7 +261,7 @@ describe('CoursewareContainer', () => {
     describe('when the URL contains a section ID instead of a sequence ID', () => {
       const { courseBlocks, unitTree, sequenceTree, sectionTree } = buildBinaryCourseBlocks(
         courseId,
-        courseHomeMetadata.title
+        courseHomeMetadata.title,
       );
 
       function setUrl(urlSequenceId, urlUnitId = null) {
@@ -344,7 +341,7 @@ describe('CoursewareContainer', () => {
         history.push(`/course/${courseId}/${defaultSequenceBlock.id}/first`);
         await loadContainer();
         expect(global.location.href).toEqual(
-          `http://localhost/course/${courseId}/${defaultSequenceBlock.id}/${defaultUnitBlocks[0].id}`
+          `http://localhost/course/${courseId}/${defaultSequenceBlock.id}/${defaultUnitBlocks[0].id}`,
         );
       });
 
@@ -352,7 +349,7 @@ describe('CoursewareContainer', () => {
         history.push(`/course/${courseId}/${defaultSequenceBlock.id}/last`);
         await loadContainer();
         expect(global.location.href).toEqual(
-          `http://localhost/course/${courseId}/${defaultSequenceBlock.id}/${defaultUnitBlocks[2].id}`
+          `http://localhost/course/${courseId}/${defaultSequenceBlock.id}/${defaultUnitBlocks[2].id}`,
         );
       });
     });
@@ -398,7 +395,7 @@ describe('CoursewareContainer', () => {
         const sequenceMetadata = Factory.build(
           'sequenceMetadata',
           { position: 3 }, // position index is 1-based and is converted to 0-based for activeUnitIndex
-          { courseId, unitBlocks, sequenceBlock }
+          { courseId, unitBlocks, sequenceBlock },
         );
         setUpMockRequests({ sequenceMetadatas: [sequenceMetadata] });
 
@@ -441,14 +438,14 @@ describe('CoursewareContainer', () => {
         const container = await waitFor(() => loadContainer());
 
         const sequenceNavButtons = container.querySelectorAll(
-          'nav.sequence-navigation a, nav.sequence-navigation button'
+          'nav.sequence-navigation a, nav.sequence-navigation button',
         );
         const sequenceNextButton = sequenceNavButtons[4];
         expect(sequenceNextButton).toHaveTextContent('Next');
         fireEvent.click(sequenceNextButton);
 
         expect(global.location.href).toEqual(
-          `http://localhost/course/${courseId}/${sequenceBlock.id}/${unitBlocks[1].id}`
+          `http://localhost/course/${courseId}/${sequenceBlock.id}/${unitBlocks[1].id}`,
         );
       });
     });
@@ -485,7 +482,7 @@ describe('CoursewareContainer', () => {
 
       const { courseBlocks, sequenceBlocks, unitBlocks } = buildSimpleCourseBlocks(
         courseId,
-        courseMetadata.name
+        courseMetadata.name,
       );
       setUpMockRequests({ courseBlocks, courseMetadata, courseHomeMetadata });
       history.push(`/course/${courseId}/${sequenceBlocks[0].id}/${unitBlocks[0].id}`);
@@ -511,7 +508,7 @@ describe('CoursewareContainer', () => {
       await loadContainer();
 
       expect(global.location.href).toEqual(
-        'http://localhost/redirect/consent?consentPath=data_sharing_consent_url'
+        'http://localhost/redirect/consent?consentPath=data_sharing_consent_url',
       );
     });
 
@@ -520,7 +517,7 @@ describe('CoursewareContainer', () => {
       await loadContainer();
 
       expect(global.location.href).toEqual(
-        `http://localhost/course/${courseMetadata.id}/access-denied`
+        `http://localhost/course/${courseMetadata.id}/access-denied`,
       );
     });
 
@@ -543,7 +540,7 @@ describe('CoursewareContainer', () => {
       await loadContainer();
 
       expect(global.location.href).toEqual(
-        'http://localhost/redirect/dashboard?access_response_error=uhoh%20oh%20no'
+        'http://localhost/redirect/dashboard?access_response_error=uhoh%20oh%20no',
       );
     });
 
@@ -553,7 +550,7 @@ describe('CoursewareContainer', () => {
 
       const startDate = '2/5/2013'; // This date is based on our courseMetadata factory's sample data.
       expect(global.location.href).toEqual(
-        `http://localhost/redirect/dashboard?notlive=${startDate}`
+        `http://localhost/redirect/dashboard?notlive=${startDate}`,
       );
     });
   });

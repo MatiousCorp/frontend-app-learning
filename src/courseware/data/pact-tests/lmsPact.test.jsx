@@ -39,7 +39,7 @@ describe('Courseware Service', () => {
       {
         LMS_BASE_URL: 'http://localhost:8081',
       },
-      'Custom app config for pact tests'
+      'Custom app config for pact tests',
     );
   });
 
@@ -411,7 +411,7 @@ describe('Courseware Service', () => {
                 href: '',
               }),
               item_id: string(
-                'block-v1:edX+DemoX+Demo_Course+type@sequential+block@basic_questions'
+                'block-v1:edX+DemoX+Demo_Course+type@sequential+block@basic_questions',
               ),
               is_time_limited: boolean(false),
               is_proctored: boolean(false),
