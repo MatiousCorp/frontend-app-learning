@@ -1,22 +1,19 @@
 /* eslint-disable no-use-before-define */
-import React, {
-  useEffect, useState,
-} from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import {
-  sendTrackEvent,
-  sendTrackingLogEvent,
-} from '@edx/frontend-platform/analytics';
+import { sendTrackEvent, sendTrackingLogEvent } from '@edx/frontend-platform/analytics';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { useSelector } from 'react-redux';
-import { history } from '@edx/frontend-platform';
 import SequenceExamWrapper from '@edx/frontend-lib-special-exams';
 import { breakpoints, useWindowSize } from '@edx/paragon';
 
 import PageLoading from '../../../generic/PageLoading';
 import { useModel } from '../../../generic/model-store';
-import { useSequenceBannerTextAlert, useSequenceEntranceExamAlert } from '../../../alerts/sequence-alerts/hooks';
+import {
+  useSequenceBannerTextAlert,
+  useSequenceEntranceExamAlert,
+} from '../../../alerts/sequence-alerts/hooks';
 
 import CourseLicense from '../course-license';
 import Sidebar from '../sidebar/Sidebar';
@@ -36,15 +33,13 @@ const Sequence = ({
   intl,
 }) => {
   const course = useModel('coursewareMeta', courseId);
-  const {
-    isStaff,
-    originalUserIsStaff,
-  } = useModel('courseHomeMeta', courseId);
+  const { isStaff, originalUserIsStaff } = useModel('courseHomeMeta', courseId);
   const sequence = useModel('sequences', sequenceId);
   const unit = useModel('units', unitId);
   const sequenceStatus = useSelector(state => state.courseware.sequenceStatus);
   const sequenceMightBeUnit = useSelector(state => state.courseware.sequenceMightBeUnit);
-  const shouldDisplayNotificationTriggerInSequence = useWindowSize().width < breakpoints.small.minWidth;
+  const shouldDisplayNotificationTriggerInSequence =
+    useWindowSize().width < breakpoints.small.minWidth;
 
   const handleNext = () => {
     const nextIndex = sequence.unitIds.indexOf(unitId) + 1;
@@ -66,7 +61,7 @@ const Sequence = ({
     }
   };
 
-  const handleNavigate = (destinationUnitId) => {
+  const handleNavigate = destinationUnitId => {
     unitNavigationHandler(destinationUnitId);
   };
 
@@ -120,16 +115,13 @@ const Sequence = ({
 
   // If sequence might be a unit, we want to keep showing a spinner - the courseware container will redirect us when
   // it knows which sequence to actually go to.
-  const loading = sequenceStatus === 'loading' || (sequenceStatus === 'failed' && sequenceMightBeUnit);
+  const loading =
+    sequenceStatus === 'loading' || (sequenceStatus === 'failed' && sequenceMightBeUnit);
   if (loading) {
     if (!sequenceId) {
-      return (<div> {intl.formatMessage(messages.noContent)} </div>);
+      return <div> {intl.formatMessage(messages.noContent)} </div>;
     }
-    return (
-      <PageLoading
-        srMessage={intl.formatMessage(messages.loadingSequence)}
-      />
-    );
+    return <PageLoading srMessage={intl.formatMessage(messages.loadingSequence)} />;
   }
 
   if (sequenceStatus === 'loaded' && sequence.isHiddenAfterDue) {
@@ -139,34 +131,34 @@ const Sequence = ({
   }
 
   const gated = sequence && sequence.gatedContent !== undefined && sequence.gatedContent.gated;
-  const goToCourseExitPage = () => {
-    history.push(`/course/${courseId}/course-end`);
-  };
 
   const defaultContent = (
     <div className="sequence-container d-inline-flex flex-row">
-      <div className={classNames('sequence w-100', { 'position-relative': shouldDisplayNotificationTriggerInSequence })}>
+      <div
+        className={classNames('sequence w-100', {
+          'position-relative': shouldDisplayNotificationTriggerInSequence,
+        })}
+      >
         <SequenceNavigation
           sequenceId={sequenceId}
           unitId={unitId}
           className="mb-4"
-          nextSequenceHandler={() => {
+          nextHandler={() => {
             logEvent('edx.ui.lms.sequence.next_selected', 'top');
             handleNext();
           }}
-          onNavigate={(destinationUnitId) => {
+          onNavigate={destinationUnitId => {
             logEvent('edx.ui.lms.sequence.tab_selected', 'top', destinationUnitId);
             handleNavigate(destinationUnitId);
           }}
-          previousSequenceHandler={() => {
+          previousHandler={() => {
             logEvent('edx.ui.lms.sequence.previous_selected', 'top');
             handlePrevious();
           }}
-          goToCourseExitPage={() => goToCourseExitPage()}
         />
         {shouldDisplayNotificationTriggerInSequence && <SidebarTriggers />}
 
-        <div className="unit-container flex-grow-1">
+        <div className="unit-container flex-grow-1 ">
           <SequenceContent
             courseId={courseId}
             gated={gated}
@@ -174,7 +166,8 @@ const Sequence = ({
             unitId={unitId}
             unitLoadedHandler={handleUnitLoaded}
           />
-          {unitHasLoaded && (
+        </div>
+        {unitHasLoaded && (
           <UnitNavigation
             sequenceId={sequenceId}
             unitId={unitId}
@@ -186,10 +179,8 @@ const Sequence = ({
               logEvent('edx.ui.lms.sequence.next_selected', 'bottom');
               handleNext();
             }}
-            goToCourseExitPage={() => goToCourseExitPage()}
           />
-          )}
-        </div>
+        )}
       </div>
       <Sidebar />
     </div>
