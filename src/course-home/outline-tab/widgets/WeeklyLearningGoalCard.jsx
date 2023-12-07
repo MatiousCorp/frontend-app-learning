@@ -9,10 +9,10 @@ import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { Email } from '@edx/paragon/icons';
 import { useSelector } from 'react-redux';
-import { Box, Typography } from '@mui/material';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import { styled } from '@mui/material/styles';
+import { Box } from '@material-ui/core';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+import { withStyles } from '@material-ui/core/styles';
 import messages from '../messages';
 import LearningGoalButton from './LearningGoalButton';
 import { saveWeeklyLearningGoal } from '../../data';
@@ -91,12 +91,12 @@ const WeeklyLearningGoalCard = ({ daysPerWeek, subscribedToReminders, intl }) =>
       data-testid="weekly-learning-goal-card"
     >
       <Box paddingX="20px" pt="20px">
-        <Typography fontWeight={700} fontSize="22px" fontFamily="Hind">
+        <Box fontWeight={700} fontSize="22px" fontFamily="Hind">
           {intl.formatMessage(messages.setWeeklyGoal)}
-        </Typography>
-        <Typography fontWeight={400} fontSize="18px" fontFamily="Hind" sx={{ opacity: 0.7 }}>
+        </Box>
+        <Box fontWeight={400} fontSize="18px" fontFamily="Hind" style={{ opacity: 0.7 }}>
           {intl.formatMessage(messages.setWeeklyGoalDetail)}
-        </Typography>
+        </Box>
       </Box>
       <Card.Section className="text-gray-700 small">
         <div
@@ -122,11 +122,11 @@ const WeeklyLearningGoalCard = ({ daysPerWeek, subscribedToReminders, intl }) =>
         </div>
         <div className="d-flex pt-3">
           <FormControlLabel
-            control={<IOSSwitch sx={{ m: 1 }} defaultChecked />}
+            control={<IOSSwitch style={{ m: 1 }} defaultChecked />}
             label={(
-              <Typography fontWeight={400} fontSize="18px" fontFamily="Hind">
+              <Box fontWeight={400} fontSize="18px" fontFamily="Hind">
                 {intl.formatMessage(messages.setGoalReminder)}
-              </Typography>
+              </Box>
             )}
             checked={isGetReminderSelected}
             onChange={event => handleSubscribeToReminders(event)}
@@ -141,9 +141,9 @@ const WeeklyLearningGoalCard = ({ daysPerWeek, subscribedToReminders, intl }) =>
               <Icon className="text-primary-500" src={Email} />
             </div>
             <div className="col">
-              <Typography fontWeight={400} fontSize="16px" fontFamily="Hind">
+              <Box fontWeight={400} fontSize="16px" fontFamily="Hind">
                 {intl.formatMessage(messages.goalReminderDetail)}
-              </Typography>
+              </Box>
             </div>
           </div>
         </Card.Section>
@@ -164,50 +164,53 @@ WeeklyLearningGoalCard.defaultProps = {
 };
 export default injectIntl(WeeklyLearningGoalCard);
 
-const IOSSwitch = styled(props => (
-  <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
-))(({ theme }) => ({
-  width: 42,
-  height: 26,
-  padding: 0,
-  '& .MuiSwitch-switchBase': {
+const IOSSwitch = withStyles(theme => ({
+  root: {
+    width: 42,
+    height: 26,
     padding: 0,
-    margin: 2,
-    transitionDuration: '300ms',
-    '&.Mui-checked': {
+    margin: theme.spacing(1),
+  },
+  switchBase: {
+    padding: 1,
+    '&$checked': {
       transform: 'translateX(16px)',
-      color: '#fff',
-      '& + .MuiSwitch-track': {
-        backgroundColor: theme.palette.mode === 'dark' ? '#2ECA45' : '#65C466',
+      color: theme.palette.common.white,
+      '& + $track': {
+        backgroundColor: '#52d869',
         opacity: 1,
-        border: 0,
-      },
-      '&.Mui-disabled + .MuiSwitch-track': {
-        opacity: 0.5,
+        border: 'none',
       },
     },
-    '&.Mui-focusVisible .MuiSwitch-thumb': {
-      color: '#33cf4d',
+    '&$focusVisible $thumb': {
+      color: '#52d869',
       border: '6px solid #fff',
     },
-    '&.Mui-disabled .MuiSwitch-thumb': {
-      color: theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[600],
-    },
-    '&.Mui-disabled + .MuiSwitch-track': {
-      opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
-    },
   },
-  '& .MuiSwitch-thumb': {
-    boxSizing: 'border-box',
-    width: 22,
-    height: 22,
+  thumb: {
+    width: 24,
+    height: 24,
   },
-  '& .MuiSwitch-track': {
+  track: {
     borderRadius: 26 / 2,
-    backgroundColor: theme.palette.mode === 'light' ? '#E9E9EA' : '#39393D',
+    border: `1px solid ${theme.palette.grey[400]}`,
+    backgroundColor: theme.palette.grey[50],
     opacity: 1,
-    transition: theme.transitions.create(['background-color'], {
-      duration: 500,
-    }),
+    transition: theme.transitions.create(['background-color', 'border']),
   },
-}));
+  checked: {},
+  focusVisible: {},
+}))(({ classes, ...props }) => (
+  <Switch
+    focusVisibleClassName={classes.focusVisible}
+    disableRipple
+    classes={{
+      root: classes.root,
+      switchBase: classes.switchBase,
+      thumb: classes.thumb,
+      track: classes.track,
+      checked: classes.checked,
+    }}
+    {...props}
+  />
+));

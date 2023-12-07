@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { useSelector } from 'react-redux';
-import { Box, Typography } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Box } from '@material-ui/core';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { GetCourseExitNavigation } from '../../course-exit';
 import UnitNavigationEffortEstimate from './UnitNavigationEffortEstimate';
 import { useSequenceNavigationMetadata } from './hooks';
@@ -21,10 +21,10 @@ const UnitNavigation = ({ intl, sequenceId, unitId, onClickPrevious, onClickNext
 
   const renderPreviousButton = () => (
     <Box display="flex" alignItems="center">
-      <ArrowBackIcon sx={{ color: '#1A2029', mr: '1rem' }} />
-      <Typography fontSize="18px" fontWeight={700} color="#1A2029" fontFamily="Hind">
+      <ArrowBackIcon style={{ color: '#1A2029', marginRight: '1rem' }} />
+      <Box fontSize="18px" fontWeight={700} color="#1A2029" fontFamily="Hind">
         {intl.formatMessage(messages.previousButton)}
-      </Typography>
+      </Box>
     </Box>
   );
 
@@ -34,16 +34,16 @@ const UnitNavigation = ({ intl, sequenceId, unitId, onClickPrevious, onClickNext
       <Box
         display="flex"
         justifyContent="flex-end"
-        sx={{
+        style={{
           alignItems: 'center',
         }}
       >
         <UnitNavigationEffortEstimate sequenceId={sequenceId} unitId={unitId}>
-          <Typography fontSize="18px" fontWeight={700} color="#1A2029" fontFamily="Hind">
+          <Box fontSize="18px" fontWeight={700} color="#1A2029" fontFamily="Hind">
             {buttonText}
-          </Typography>
+          </Box>
         </UnitNavigationEffortEstimate>
-        <ArrowForwardIcon sx={{ color: '#1A2029', ml: '1rem' }} />
+        <ArrowForwardIcon style={{ color: '#1A2029', marginLeft: '1rem' }} />
       </Box>
     );
   };
@@ -59,11 +59,11 @@ const UnitNavigation = ({ intl, sequenceId, unitId, onClickPrevious, onClickNext
       <Box
         width="50%"
         height="100%"
-        sx={{
-          '&: hover': { cursor: isFirstUnit ? 'not-allowed' : 'pointer' },
+        style={{
+          cursor: isFirstUnit ? 'not-allowed' : 'pointer',
           display: 'flex',
           alignItems: 'center',
-          ml: '2rem',
+          marginLeft: '2rem',
           opacity: isFirstUnit ? 0.5 : 1,
         }}
         onClick={() => (isFirstUnit ? null : onClickPrevious())}
@@ -76,11 +76,11 @@ const UnitNavigation = ({ intl, sequenceId, unitId, onClickPrevious, onClickNext
         width="50%"
         height="100%"
         borderLeft="1px solid #eaeaea"
-        sx={{
-          '&: hover': { cursor: isLastUnit && !exitActive ? 'not-allowed' : 'pointer' },
+        style={{
+          cursor: isLastUnit && !exitActive ? 'not-allowed' : 'pointer',
           display: 'flex',
           justifyContent: 'flex-end',
-          mr: '2rem',
+          marginRight: '2rem',
           opacity: isLastUnit && !exitActive ? 0.5 : 1,
         }}
         onClick={() => (isLastUnit && !exitActive ? null : onClickNext())}

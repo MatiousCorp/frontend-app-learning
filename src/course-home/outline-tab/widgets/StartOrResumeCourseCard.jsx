@@ -1,9 +1,9 @@
 import React from 'react';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
-import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import { useSelector } from 'react-redux';
 import { sendTrackingLogEvent } from '@edx/frontend-platform/analytics';
-import { Typography, Box, Button } from '@mui/material';
+import { Box, Button } from '@material-ui/core';
 import messages from '../messages';
 import { useModel } from '../../../generic/model-store';
 
@@ -41,36 +41,35 @@ const StartOrResumeCourseCard = ({ intl }) => {
       border="1px solid #C8CACC"
       borderRadius="10px"
       padding="15px"
-      sx={{ mb: '1rem' }}
+      style={{ marginBottom: '1rem' }}
     >
-      <Typography fontSize="20px" fontWeight={700} fontFamily="Hind">
+      <Box fontSize="20px" fontWeight={700} fontFamily="Hind">
         {hasVisitedCourse
           ? intl.formatMessage(messages.resumeBlurb)
           : intl.formatMessage(messages.startBlurb)}
-      </Typography>
+      </Box>
       <Button
         variant="contained"
-        block
         href={resumeCourseUrl}
         onClick={() => logResumeCourseClick()}
-        sx={{
-          bgcolor: '#434C59',
+        style={{
+          backgroundColor: '#434C59',
           height: '50px',
           borderRadius: '5px',
         }}
         startIcon={<PlayCircleOutlineIcon style={{ color: 'white', fontSize: 24 }} />}
       >
-        <Typography
+        <Box
           fontSize="16px"
           fontWeight={500}
-          textTransform="capitalize"
           fontFamily="Hind"
           color="white"
+          style={{ textTransform: 'capitalize' }}
         >
           {hasVisitedCourse
             ? intl.formatMessage(messages.resume)
             : intl.formatMessage(messages.start)}
-        </Typography>
+        </Box>
       </Button>
     </Box>
   );

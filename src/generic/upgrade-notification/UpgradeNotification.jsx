@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { sendTrackEvent, sendTrackingLogEvent } from '@edx/frontend-platform/analytics';
 import { FormattedDate, FormattedMessage, injectIntl } from '@edx/frontend-platform/i18n';
-import { Button, Typography } from '@mui/material';
+import { Button, Box } from '@material-ui/core';
 import { setLocalStorage } from '../../data/localStorage';
 import { UpgradeButton } from '../upgrade-button';
 import {
@@ -468,23 +468,22 @@ const UpgradeNotification = ({
     upsellMessage = <UpsellNoFBECardContent />;
   }
 
-  if (pastExpirationDeadline) {
+  if (!pastExpirationDeadline) {
     callToActionButton = (
       <Button
         variant="contained"
-        block
         href={marketingUrl}
         onClick={logClickPastExpiration}
-        sx={{
-          bgcolor: '#434C59',
+        style={{
+          backgroundColor: '#434C59',
           height: '50px',
           borderRadius: '5px',
         }}
         fullWidth
       >
-        <Typography fontSize="16px" fontWeight={500} textTransform="capitalize" fontFamily="Hind">
+        <Box fontSize="16px" fontWeight={500} textTransform="capitalize" fontFamily="Hind">
           View Course Details
-        </Typography>
+        </Box>
       </Button>
     );
   } else {

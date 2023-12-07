@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Typography } from '@mui/material';
+import { Box } from '@material-ui/core';
 import { sendTrackingLogEvent } from '@edx/frontend-platform/analytics';
 import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
@@ -63,9 +63,9 @@ const CourseTools = ({ intl }) => {
 
   return (
     <section className="mb-3">
-      <Typography fontSize="18px" fontWeight={700} fontFamily="Hind" color="#1A2029">
+      <Box fontSize="18px" fontWeight={700} fontFamily="Hind" color="#1A2029">
         {intl.formatMessage(messages.tools)}
-      </Typography>
+      </Box>
       <ul className="list-unstyled mt-1">
         {courseTools.map(courseTool => (
           <li key={courseTool.analyticsId} className="small">

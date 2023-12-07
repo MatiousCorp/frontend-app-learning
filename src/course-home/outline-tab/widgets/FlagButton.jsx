@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { Typography } from '@mui/material';
+import { Box } from '@material-ui/core';
 
 const FlagButton = ({ buttonIcon, title, text, handleSelect, isSelected }) => (
   <button
@@ -17,19 +17,14 @@ const FlagButton = ({ buttonIcon, title, text, handleSelect, isSelected }) => (
   >
     <div className="row w-100 m-0 justify-content-center pb-2">{buttonIcon}</div>
     <div className={classnames('row w-100 m-0 justify-content-center')}>
-      <Typography fontWeight={isSelected ? 600 : 500} fontSize="16px" fontFamily="Hind">
+      <Box fontWeight={isSelected ? 600 : 500} fontSize="16px" fontFamily="Hind">
         {title}
-      </Typography>
+      </Box>
     </div>
     <div className={classnames('row w-100 m-0 justify-content-center')}>
-      <Typography
-        fontWeight={isSelected ? 600 : 500}
-        fontSize="14px"
-        fontFamily="Hind"
-        color="grey"
-      >
+      <Box fontWeight={isSelected ? 600 : 500} fontSize="14px" fontFamily="Hind" color="grey">
         {text}
-      </Typography>
+      </Box>
     </div>
   </button>
 );

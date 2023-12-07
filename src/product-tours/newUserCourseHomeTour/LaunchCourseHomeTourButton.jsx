@@ -8,7 +8,7 @@ import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { Button, Icon } from '@edx/paragon';
 import { Compass } from '@edx/paragon/icons';
 
-import { Typography } from '@mui/material';
+import { Box } from '@material-ui/core';
 import { useModel } from '../../generic/model-store';
 import { launchCourseHomeTour } from '../data/slice';
 import messages from '../messages';
@@ -47,9 +47,9 @@ const LaunchCourseHomeTourButton = ({ intl, srOnly }) => {
           {!srOnly && (
             <Icon src={Compass} className="mr-2" style={{ height: '18px', width: '18px' }} />
           )}
-          <Typography fontSize="15px" fontFamily="Hind">
+          <Box fontSize="15px" fontFamily="Hind">
             {intl.formatMessage(messages.launchTour)}
-          </Typography>
+          </Box>
         </Button>
       )}
     </>

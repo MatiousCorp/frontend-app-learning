@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Typography } from '@mui/material';
+import { Box } from '@material-ui/core';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 
 import LmsHtmlFragment from '../LmsHtmlFragment';
@@ -17,9 +17,9 @@ const CourseHandouts = ({ intl }) => {
 
   return (
     <section className="mb-4">
-      <Typography fontSize="18px" fontWeight={700} color="#1A2029" fontFamily="Hind">
+      <Box fontSize="18px" fontWeight={700} color="#1A2029" fontFamily="Hind">
         {intl.formatMessage(messages.handouts)}
-      </Typography>
+      </Box>
       <LmsHtmlFragment
         className="medium"
         html={handoutsHtml}

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { history } from '@edx/frontend-platform';
 import { useSelector } from 'react-redux';
 import { sendTrackEvent } from '@edx/frontend-platform/analytics';
 import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
-import { Typography, Box } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import { Box } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 import { AlertList } from '../../generic/user-messages';
 
 import CourseDates from './widgets/CourseDates';
@@ -49,7 +50,6 @@ const OutlineTab = ({ intl }) => {
   const { marketingUrl } = useModel('coursewareMeta', courseId);
 
   const [expandAll, setExpandAll] = useState(false);
-  const navigate = useNavigate();
 
   const eventProperties = {
     org_key: org,
@@ -101,10 +101,8 @@ const OutlineTab = ({ intl }) => {
       // Deleting the course_start query param as it only needs to be set once
       // whenever passed in query params.
       currentParams.delete('start_course');
-      navigate({
-        pathname: location.pathname,
-        search: `?${currentParams.toString()}`,
-        replace: true,
+      history.replace({
+        search: currentParams.toString(),
       });
     }
   }, [location.search]);
@@ -113,9 +111,9 @@ const OutlineTab = ({ intl }) => {
     <>
       <div data-learner-type={learnerType} className="row w-100 mx-0 my-3 justify-content-between">
         <div className="col-12 col-sm-auto p-0">
-          <Typography fontSize="48px" fontWeight={700} color="#1A2029" fontFamily="Hind">
+          <Box fontSize="48px" fontWeight={700} color="#1A2029" fontFamily="Hind">
             {title}
-          </Typography>
+          </Box>
         </div>
       </div>
       <div className="row course-outline-tab">
@@ -159,7 +157,7 @@ const OutlineTab = ({ intl }) => {
                     onClick={() => {
                       setExpandAll(!expandAll);
                     }}
-                    sx={{
+                    style={{
                       '&: hover': {
                         cursor: 'pointer',
                       },
@@ -172,7 +170,7 @@ const OutlineTab = ({ intl }) => {
                         fontSize: 28,
                       }}
                     />
-                    <Typography
+                    <Box
                       fontSize="18px"
                       fontWeight={600}
                       textTransform="capitalize"
@@ -181,7 +179,7 @@ const OutlineTab = ({ intl }) => {
                       {expandAll
                         ? intl.formatMessage(messages.collapseAll)
                         : intl.formatMessage(messages.expandAll)}
-                    </Typography>
+                    </Box>
                   </Box>
                 </div>
               </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl, intlShape } from '@edx/frontend-platform/i18n';
-import { Button, Typography } from '@mui/material';
+import { Button, Box } from '@material-ui/core';
 
 import FormattedPricing from './FormattedPricing';
 
@@ -17,15 +17,21 @@ const UpgradeButton = props => {
       block
       href={url}
       onClick={onClick}
-      sx={{
-        bgcolor: '#434C59',
+      style={{
+        backgroundColor: '#434C59',
         height: '50px',
         borderRadius: '5px',
       }}
       fullWidth
       {...rest}
     >
-      <Typography fontSize="16px" fontWeight={500} textTransform="capitalize" fontFamily="Hind">
+      <Box
+        fontSize="16px"
+        fontWeight={500}
+        style={{ textTransform: 'capitalize' }}
+        fontFamily="Hind"
+        color="white"
+      >
         <FormattedMessage
           id="learning.upgradeButton.buttonText"
           defaultMessage="Upgrade for {pricing}"
@@ -33,7 +39,7 @@ const UpgradeButton = props => {
             pricing: <FormattedPricing offer={offer} verifiedMode={verifiedMode} />,
           }}
         />
-      </Typography>
+      </Box>
     </Button>
   );
 };

@@ -10,7 +10,7 @@ import {
 import { faCheckCircle as farCheckCircle } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Typography } from '@mui/material';
+import { Box } from '@material-ui/core';
 import SequenceLink from './SequenceLink';
 import { useModel } from '../../generic/model-store';
 
@@ -56,15 +56,15 @@ const Section = ({ courseId, defaultOpen, expand, intl, section }) => {
         )}
       </div>
       <div className="col-10 ml-3 p-0 font-weight-bold text-dark-500">
-        <Typography
+        <Box
           width="100%"
           fontWeight={700}
           fontSize="20px"
           fontFamily="Hind"
-          sx={{ verticalAlign: 'top !important' }}
+          style={{ verticalAlign: 'top !important' }}
         >
           {title}
-        </Typography>
+        </Box>
         <span className="sr-only">
           , {intl.formatMessage(complete ? messages.completedSection : messages.incompleteSection)}
         </span>

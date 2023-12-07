@@ -1,11 +1,11 @@
-@import "~@edx/brand/paragon/variables";
-@import "~@edx/paragon/scss/core/core";
-@import "~@edx/brand/paragon/overrides";
+@import '~@edx/brand/paragon/variables';
+@import '~@edx/paragon/scss/core/core';
+@import '~@edx/brand/paragon/overrides';
 
 .flag-button {
   background-color: $white;
   border: 1px solid $light-400;
-  border-radius: .2rem;
+  border-radius: 0.2rem;
   box-shadow: 0 0 0 2px $light-400;
 
   &:hover {
@@ -30,7 +30,7 @@
   margin: calc(var(--margin) * -1);
 }
 
-.flag-button-container > *  {
+.flag-button-container > * {
   flex-grow: 1;
   flex-basis: calc(var(--modifier) * 999);
   margin: var(--margin);

@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import { breakpoints, useWindowSize } from '@edx/paragon';
 import classNames from 'classnames';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@material-ui/core';
 import { useSelector } from 'react-redux';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { GetCourseExitNavigation } from '../../course-exit';
 import UnitButton from './UnitButton';
 import SequenceNavigationTabs from './SequenceNavigationTabs';
@@ -59,13 +59,19 @@ const SequenceNavigation = ({
   };
 
   const renderPreviousButton = () => (
-    <Box display="flex" alignItems="center" borderRight="1px solid #eaeaea" height="100%" pr="2rem">
-      <ArrowBackIcon sx={{ color: '#1A2029', ml: '2rem', mr: '1rem' }} />
-      <Typography fontSize="18px" fontWeight={700} color="#1A2029" fontFamily="Hind">
+    <Box
+      display="flex"
+      alignItems="center"
+      borderRight="1px solid #eaeaea"
+      height="100%"
+      paddingRight="2rem"
+    >
+      <ArrowBackIcon style={{ color: '#1A2029', marginLeft: '2rem', marginRight: '1rem' }} />
+      <Box fontSize="18px" fontWeight={700} color="#1A2029" fontFamily="Hind">
         {shouldDisplayNotificationTriggerInSequence
           ? null
           : intl.formatMessage(messages.previousButton)}
-      </Typography>
+      </Box>
     </Box>
   );
 
@@ -73,18 +79,12 @@ const SequenceNavigation = ({
     const buttonText = isLastUnit && exitText ? exitText : intl.formatMessage(messages.nextButton);
 
     return (
-      <Box
-        display="flex"
-        justifyContent="flex-end"
-        sx={{
-          alignItems: 'center',
-        }}
-      >
-        <Typography fontSize="18px" fontWeight={700} color="#1A2029" fontFamily="Hind">
+      <Box display="flex" justifyContent="flex-end" alignItems="center">
+        <Box fontSize="18px" fontWeight={700} color="#1A2029" fontFamily="Hind">
           {shouldDisplayNotificationTriggerInSequence ? null : buttonText}
-        </Typography>
+        </Box>
 
-        <ArrowForwardIcon sx={{ color: '#1A2029', ml: '1rem' }} />
+        <ArrowForwardIcon style={{ color: '#1A2029', marginLeft: '1rem' }} />
       </Box>
     );
   };
@@ -94,10 +94,13 @@ const SequenceNavigation = ({
       <nav
         id="courseware-sequenceNavigation"
         className={classNames('sequence-navigation', className)}
-        style={{ width: shouldDisplayNotificationTriggerInSequence ? '90%' : null }}
+        style={{
+          width: shouldDisplayNotificationTriggerInSequence ? '90%' : null,
+          cursor: 'pointer',
+        }}
       >
         <Box
-          sx={{
+          style={{
             '&: hover': { cursor: isFirstUnit ? 'not-allowed' : 'pointer' },
             display: 'flex',
             alignItems: 'center',
@@ -111,12 +114,12 @@ const SequenceNavigation = ({
         </Box>
         {renderUnitButtons()}
         <Box
-          sx={{
+          style={{
             '&: hover': { cursor: isLastUnit && !exitActive ? 'not-allowed' : 'pointer' },
             display: 'flex',
             justifyContent: 'flex-end',
-            mr: '2rem',
-            pl: '2rem',
+            marginRight: '2rem',
+            paddingLeft: '2rem',
             borderBottom: '1px solid #eaeaea',
             borderLeft: '1px solid #eaeaea',
             opacity: isLastUnit && !exitActive ? 0.5 : 1,
