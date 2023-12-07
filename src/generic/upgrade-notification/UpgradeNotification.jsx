@@ -468,7 +468,7 @@ const UpgradeNotification = ({
     upsellMessage = <UpsellNoFBECardContent />;
   }
 
-  if (!pastExpirationDeadline) {
+  if (pastExpirationDeadline) {
     callToActionButton = (
       <Button
         variant="contained"
