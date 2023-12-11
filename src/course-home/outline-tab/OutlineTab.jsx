@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { history } from '@edx/frontend-platform';
 import { useSelector } from 'react-redux';
 import { sendTrackEvent } from '@edx/frontend-platform/analytics';
 import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
+import { history } from '@edx/frontend-platform';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
-import { Box } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import { Button } from '@edx/paragon';
 import { AlertList } from '../../generic/user-messages';
 
 import CourseDates from './widgets/CourseDates';
@@ -31,23 +30,41 @@ import ProctoringInfoPanel from './widgets/ProctoringInfoPanel';
 import AccountActivationAlert from '../../alerts/logistration-alert/AccountActivationAlert';
 
 const OutlineTab = ({ intl }) => {
-  const { courseId, proctoringPanelStatus } = useSelector(state => state.courseHome);
+  const {
+    courseId,
+    proctoringPanelStatus,
+  } = useSelector(state => state.courseHome);
 
-  const { isSelfPaced, org, title, userTimezone } = useModel('courseHomeMeta', courseId);
+  const {
+    isSelfPaced,
+    org,
+    title,
+    userTimezone,
+  } = useModel('courseHomeMeta', courseId);
 
   const {
     accessExpiration,
-    courseBlocks: { courses, sections },
-    courseGoals: { selectedGoal, weeklyLearningGoalEnabled } = {},
+    courseBlocks: {
+      courses,
+      sections,
+    },
+    courseGoals: {
+      selectedGoal,
+      weeklyLearningGoalEnabled,
+    } = {},
     datesBannerInfo,
-    datesWidget: { courseDateBlocks },
+    datesWidget: {
+      courseDateBlocks,
+    },
     enableProctoredExams,
     offer,
     timeOffsetMillis,
     verifiedMode,
   } = useModel('outline', courseId);
 
-  const { marketingUrl } = useModel('coursewareMeta', courseId);
+  const {
+    marketingUrl,
+  } = useModel('coursewareMeta', courseId);
 
   const [expandAll, setExpandAll] = useState(false);
 
@@ -65,8 +82,7 @@ const OutlineTab = ({ intl }) => {
 
   const rootCourseId = courses && Object.keys(courses)[0];
 
-  const hasDeadlines =
-    courseDateBlocks && courseDateBlocks.some(x => x.dateType === 'assignment-due-date');
+  const hasDeadlines = courseDateBlocks && courseDateBlocks.some(x => x.dateType === 'assignment-due-date');
 
   const logUpgradeToShiftDatesLinkClick = () => {
     sendTrackEvent('edx.bi.ecommerce.upsell_links_clicked', {
@@ -80,9 +96,7 @@ const OutlineTab = ({ intl }) => {
 
   const isEnterpriseUser = () => {
     const authenticatedUser = getAuthenticatedUser();
-    const userRoleNames = authenticatedUser
-      ? authenticatedUser.roles.map(role => role.split(':')[0])
-      : [];
+    const userRoleNames = authenticatedUser ? authenticatedUser.roles.map(role => role.split(':')[0]) : [];
 
     return userRoleNames.includes('enterprise_learner');
   };
@@ -111,9 +125,7 @@ const OutlineTab = ({ intl }) => {
     <>
       <div data-learner-type={learnerType} className="row w-100 mx-0 my-3 justify-content-between">
         <div className="col-12 col-sm-auto p-0">
-          <Box fontSize="48px" fontWeight={700} color="#1A2029" fontFamily="Hind">
-            {title}
-          </Box>
+          <div role="heading" aria-level="1" className="h2">{title}</div>
         </div>
       </div>
       <div className="row course-outline-tab">
@@ -140,10 +152,7 @@ const OutlineTab = ({ intl }) => {
           {isSelfPaced && hasDeadlines && (
             <>
               <ShiftDatesAlert model="outline" fetch={fetchOutlineTab} />
-              <UpgradeToShiftDatesAlert
-                model="outline"
-                logUpgradeLinkClick={logUpgradeToShiftDatesLinkClick}
-              />
+              <UpgradeToShiftDatesAlert model="outline" logUpgradeLinkClick={logUpgradeToShiftDatesLinkClick} />
             </>
           )}
           <StartOrResumeCourseCard />
@@ -152,39 +161,13 @@ const OutlineTab = ({ intl }) => {
             <>
               <div className="row w-100 m-0 mb-3 justify-content-end">
                 <div className="col-12 col-md-auto p-0">
-                  <Box
-                    display="flex"
-                    onClick={() => {
-                      setExpandAll(!expandAll);
-                    }}
-                    style={{
-                      '&: hover': {
-                        cursor: 'pointer',
-                      },
-                    }}
-                  >
-                    <AddIcon
-                      style={{
-                        color: 'grey',
-                        marginRight: '5px',
-                        fontSize: 28,
-                      }}
-                    />
-                    <Box
-                      fontSize="18px"
-                      fontWeight={600}
-                      textTransform="capitalize"
-                      fontFamily="Hind"
-                    >
-                      {expandAll
-                        ? intl.formatMessage(messages.collapseAll)
-                        : intl.formatMessage(messages.expandAll)}
-                    </Box>
-                  </Box>
+                  <Button variant="outline-primary" block onClick={() => { setExpandAll(!expandAll); }}>
+                    {expandAll ? intl.formatMessage(messages.collapseAll) : intl.formatMessage(messages.expandAll)}
+                  </Button>
                 </div>
               </div>
               <ol id="courseHome-outline" className="list-unstyled">
-                {courses[rootCourseId].sectionIds.map(sectionId => (
+                {courses[rootCourseId].sectionIds.map((sectionId) => (
                   <Section
                     key={sectionId}
                     courseId={courseId}
@@ -200,20 +183,13 @@ const OutlineTab = ({ intl }) => {
         {rootCourseId && (
           <div className="col col-12 col-md-4">
             <ProctoringInfoPanel />
-            {/** Defer showing the goal widget until the ProctoringInfoPanel has resolved or has been determined as
-             disabled to avoid components bouncing around too much as screen is rendered */}
-            {(!enableProctoredExams || proctoringPanelStatus === 'loaded') &&
-              weeklyLearningGoalEnabled && (
-                <WeeklyLearningGoalCard
-                  daysPerWeek={
-                    selectedGoal && 'daysPerWeek' in selectedGoal ? selectedGoal.daysPerWeek : null
-                  }
-                  subscribedToReminders={
-                    selectedGoal && 'subscribedToReminders' in selectedGoal
-                      ? selectedGoal.subscribedToReminders
-                      : false
-                  }
-                />
+            { /** Defer showing the goal widget until the ProctoringInfoPanel has resolved or has been determined as
+             disabled to avoid components bouncing around too much as screen is rendered */ }
+            {(!enableProctoredExams || proctoringPanelStatus === 'loaded') && weeklyLearningGoalEnabled && (
+              <WeeklyLearningGoalCard
+                daysPerWeek={selectedGoal && 'daysPerWeek' in selectedGoal ? selectedGoal.daysPerWeek : null}
+                subscribedToReminders={selectedGoal && 'subscribedToReminders' in selectedGoal ? selectedGoal.subscribedToReminders : false}
+              />
             )}
             <CourseTools />
             <UpgradeNotification

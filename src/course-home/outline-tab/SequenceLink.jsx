@@ -16,9 +16,23 @@ import EffortEstimate from '../../shared/effort-estimate';
 import { useModel } from '../../generic/model-store';
 import messages from './messages';
 
-const SequenceLink = ({ id, intl, courseId, first, sequence }) => {
-  const { complete, description, due, showLink, title } = sequence;
-  const { userTimezone } = useModel('outline', courseId);
+const SequenceLink = ({
+  id,
+  intl,
+  courseId,
+  first,
+  sequence,
+}) => {
+  const {
+    complete,
+    description,
+    due,
+    showLink,
+    title,
+  } = sequence;
+  const {
+    userTimezone,
+  } = useModel('outline', courseId);
 
   const timezoneFormatArgs = userTimezone ? { timeZone: userTimezone } : {};
 
@@ -71,11 +85,7 @@ const SequenceLink = ({ id, intl, courseId, first, sequence }) => {
 
   return (
     <li>
-      <div
-        className={classNames('', {
-          'mt-2 pt-2 border-top border-light': !first,
-        })}
-      >
+      <div className={classNames('', { 'mt-2 pt-2 border-top border-light': !first })}>
         <div className="row w-100 m-0">
           <div className="col-auto p-0">
             {complete ? (
@@ -99,16 +109,15 @@ const SequenceLink = ({ id, intl, courseId, first, sequence }) => {
           <div className="col-10 p-0 ml-3 text-break">
             <span className="align-middle">{displayTitle}</span>
             <span className="sr-only">
-              ,{' '}
-              {intl.formatMessage(
-                complete ? messages.completedAssignment : messages.incompleteAssignment,
-              )}
+              , {intl.formatMessage(complete ? messages.completedAssignment : messages.incompleteAssignment)}
             </span>
             <EffortEstimate className="ml-3 align-middle" block={sequence} />
           </div>
         </div>
         <div className="row w-100 m-0 ml-3 pl-3">
-          <small className="text-body pl-2">{due ? dueDateMessage : noDueDateMessage}</small>
+          <small className="text-body pl-2">
+            {due ? dueDateMessage : noDueDateMessage}
+          </small>
         </div>
       </div>
     </li>

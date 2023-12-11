@@ -2,25 +2,32 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { Collapsible, IconButton } from '@edx/paragon';
-import {
-  faCheckCircle as fasCheckCircle,
-  faChevronUp,
-  faChevronDown,
-} from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle as fasCheckCircle, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faCheckCircle as farCheckCircle } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Box } from '@material-ui/core';
 import SequenceLink from './SequenceLink';
 import { useModel } from '../../generic/model-store';
 
 import genericMessages from '../../generic/messages';
 import messages from './messages';
 
-const Section = ({ courseId, defaultOpen, expand, intl, section }) => {
-  const { complete, sequenceIds, title } = section;
+const Section = ({
+  courseId,
+  defaultOpen,
+  expand,
+  intl,
+  section,
+}) => {
   const {
-    courseBlocks: { sequences },
+    complete,
+    sequenceIds,
+    title,
+  } = section;
+  const {
+    courseBlocks: {
+      sequences,
+    },
   } = useModel('outline', courseId);
 
   const [open, setOpen] = useState(defaultOpen);
@@ -31,7 +38,7 @@ const Section = ({ courseId, defaultOpen, expand, intl, section }) => {
 
   useEffect(() => {
     setOpen(defaultOpen);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const sectionTitle = (
@@ -56,15 +63,7 @@ const Section = ({ courseId, defaultOpen, expand, intl, section }) => {
         )}
       </div>
       <div className="col-10 ml-3 p-0 font-weight-bold text-dark-500">
-        <Box
-          width="100%"
-          fontWeight={700}
-          fontSize="20px"
-          fontFamily="Hind"
-          style={{ verticalAlign: 'top !important' }}
-        >
-          {title}
-        </Box>
+        <span className="align-middle">{title}</span>
         <span className="sr-only">
           , {intl.formatMessage(complete ? messages.completedSection : messages.incompleteSection)}
         </span>
@@ -77,37 +76,27 @@ const Section = ({ courseId, defaultOpen, expand, intl, section }) => {
       <Collapsible
         className="mb-2"
         styling="card-lg"
-        style={{
-          borderLeft: '2px solid #434C59',
-          backgroundColor: '#F9FAFA',
-        }}
         title={sectionTitle}
         open={open}
-        onToggle={() => {
-          setOpen(!open);
-        }}
+        onToggle={() => { setOpen(!open); }}
         iconWhenClosed={(
           <IconButton
             alt={intl.formatMessage(messages.openSection)}
-            icon={faChevronDown}
-            onClick={() => {
-              setOpen(true);
-            }}
+            icon={faPlus}
+            onClick={() => { setOpen(true); }}
             size="sm"
           />
         )}
         iconWhenOpen={(
           <IconButton
             alt={intl.formatMessage(genericMessages.close)}
-            icon={faChevronUp}
-            onClick={() => {
-              setOpen(false);
-            }}
+            icon={faMinus}
+            onClick={() => { setOpen(false); }}
             size="sm"
           />
         )}
       >
-        <ol className="list-unstyled" style={{ paddingLeft: '40px' }}>
+        <ol className="list-unstyled">
           {sequenceIds.map((sequenceId, index) => (
             <SequenceLink
               key={sequenceId}

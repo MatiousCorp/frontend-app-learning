@@ -8,17 +8,22 @@ import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { Button, Icon } from '@edx/paragon';
 import { Compass } from '@edx/paragon/icons';
 
-import { Box } from '@material-ui/core';
 import { useModel } from '../../generic/model-store';
 import { launchCourseHomeTour } from '../data/slice';
 import messages from '../messages';
 
 const LaunchCourseHomeTourButton = ({ intl, srOnly }) => {
-  const { courseId } = useSelector(state => state.courseHome);
+  const {
+    courseId,
+  } = useSelector(state => state.courseHome);
 
-  const { org } = useModel('courseHomeMeta', courseId);
+  const {
+    org,
+  } = useModel('courseHomeMeta', courseId);
 
-  const { toursEnabled } = useSelector(state => state.tours);
+  const {
+    toursEnabled,
+  } = useSelector(state => state.tours);
 
   const dispatch = useDispatch();
 
@@ -38,18 +43,15 @@ const LaunchCourseHomeTourButton = ({ intl, srOnly }) => {
     // eslint-disable-next-line react/jsx-no-useless-fragment
     <>
       {toursEnabled && (
-        <Button
-          variant="link"
-          size="inline"
-          className={`p-0 ${srOnly && 'sr-only sr-only-focusable'}`}
-          onClick={handleClick}
-        >
+        <Button variant="link" size="inline" className={`p-0 ${srOnly && 'sr-only sr-only-focusable'}`} onClick={handleClick}>
           {!srOnly && (
-            <Icon src={Compass} className="mr-2" style={{ height: '18px', width: '18px' }} />
+            <Icon
+              src={Compass}
+              className="mr-2"
+              style={{ height: '18px', width: '18px' }}
+            />
           )}
-          <Box fontSize="15px" fontFamily="Hind">
-            {intl.formatMessage(messages.launchTour)}
-          </Box>
+          {intl.formatMessage(messages.launchTour)}
         </Button>
       )}
     </>
