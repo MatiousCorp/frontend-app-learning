@@ -36,7 +36,7 @@ function getStudioUrl(courseId, unitId) {
   return urlFull;
 }
 
-const InstructorToolbar = (props) => {
+const InstructorToolbar = props => {
   // This didMount logic became necessary once we had a page that does a redirect on a quick exit.
   // As a result, it unmounts the InstructorToolbar (which will be remounted by the new component),
   // but the InstructorToolbar's MasqueradeWidget has an outgoing request. Since it is unmounted
@@ -52,11 +52,7 @@ const InstructorToolbar = (props) => {
     return () => setDidMount(false);
   });
 
-  const {
-    courseId,
-    unitId,
-    tab,
-  } = props;
+  const { courseId, unitId, tab } = props;
 
   const urlInsights = getInsightsUrl(courseId);
   const urlStudio = getStudioUrl(courseId, unitId);
@@ -65,9 +61,9 @@ const InstructorToolbar = (props) => {
   const accessExpirationMasqueradeBanner = useAccessExpirationMasqueradeBanner(courseId, tab);
   const courseStartDateMasqueradeBanner = useCourseStartMasqueradeBanner(courseId, tab);
 
-  return (!didMount ? null : (
+  return !didMount ? null : (
     <div data-testid="instructor-toolbar">
-      <div className="bg-primary text-white">
+      <div className="text-white" style={{ backgroundColor: '#434C59' }}>
         <div className="container-xl py-3 d-md-flex justify-content-end align-items-start">
           <div className="align-items-center flex-grow-1 d-md-flex mx-1 my-1">
             <MasqueradeWidget courseId={courseId} onError={showMasqueradeError} />
@@ -80,22 +76,23 @@ const InstructorToolbar = (props) => {
           )}
           {urlStudio && (
             <span className="mx-1 my-1">
-              <a className="btn btn-inverse-outline-primary" href={urlStudio}>Studio</a>
+              <a className="btn btn-inverse-outline-primary" href={urlStudio}>
+                Studio
+              </a>
             </span>
           )}
           {urlInsights && (
             <span className="mx-1 my-1">
-              <a className="btn btn-inverse-outline-primary" href={urlInsights}>Insights</a>
+              <a className="btn btn-inverse-outline-primary" href={urlInsights}>
+                Insights
+              </a>
             </span>
           )}
         </div>
       </div>
       {masqueradeErrorMessage && (
         <div className="container-xl mt-3">
-          <Alert
-            type={ALERT_TYPES.ERROR}
-            dismissible={false}
-          >
+          <Alert type={ALERT_TYPES.ERROR} dismissible={false}>
             {masqueradeErrorMessage}
           </Alert>
         </div>
@@ -108,7 +105,7 @@ const InstructorToolbar = (props) => {
         }}
       />
     </div>
-  ));
+  );
 };
 
 InstructorToolbar.propTypes = {
